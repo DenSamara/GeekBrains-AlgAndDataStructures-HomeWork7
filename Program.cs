@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-//Алгори́тм Де́йкстры (англ. Dijkstra’s algorithm) — алгоритм на графах
+//Алгори́тм Де́йкстры (Dijkstra’s algorithm) — алгоритм на графах
 //Находит кратчайшие пути от одной из вершин графа до всех остальных. 
 //  |A |B |C |D |E |F
 // A|  |7 |9 |  |  |14
@@ -58,9 +58,6 @@ namespace Dijkstra
 
             Node[] nodes = new Node[] { a, b, c, d, e, f };
 
-            //Задаём очередь
-            Queue<Node> queue = new Queue<Node>();
-
             //Задаем матрицу смежности
             byte[,] matrix = {
                 {byte.MaxValue, 7, 9, byte.MaxValue, byte.MaxValue, 14},
@@ -73,40 +70,35 @@ namespace Dijkstra
 
             //Потому что с неё начинаем
             nodes[0].Path = 0;
-            //queue.Enqueue(a);
 
-            foreach (Node item in nodes)
-            {
-                
-            }
-
-            //перебор строк
             for (byte i = 0; i < ITEMS_COUNT; i++)
             {
-                //перебор столбцов
-                for (byte j = 1; j < ITEMS_COUNT; j++)
+                for (byte j = 0; j < ITEMS_COUNT; j++)
                 {
-                    //Надо проверить, что вершина не обработана
-                    if (nodes[j].IsHandled) continue;
-
                     byte length = matrix[i, j];
-                    if (length < byte.MaxValue)
+                    
+                    if (length < byte.MaxValue)//Если не +бесконечность,то проставляем длину пути у нод
                     {
-                        if (nodes[i].Path != 0 && length < nodes[i].Path + length)
-                        {
-                            nodes[i].Path = (byte)(nodes[i].Path + length);
-                        }
+                        //Пробуем уменьшить, если получается - записываем новое значение
+                        if (nodes[i].Path + length < nodes[j].Path)
+                            nodes[j].Path = (byte)(nodes[i].Path + length);
                     }
                 }
                 nodes[i].IsHandled = true;
             }
 
+            printNodes(nodes);
+
+            Console.ReadKey();
+        }
+
+        static void printNodes(Node[] nodes)
+        {
             foreach (Node item in nodes)
             {
                 Console.WriteLine(item.ToString());
             }
-
-            Console.ReadKey();
+            Console.WriteLine();
         }
     }
 }
